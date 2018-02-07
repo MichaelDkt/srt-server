@@ -7,6 +7,8 @@ const getPickingList = require("./queries/getPickingList");
 const modifyQtyPickingList = require("./queries/modifyQtyPickingList");
 const getItemDetails = require("./queries/getItemDetails");
 const addToPickingList = require("./queries/addToPickingList");
+const deletePickingRow = require("./queries/deletePickingRow");
+
 
 
 const port = process.env.PORT || 4000;
@@ -65,8 +67,17 @@ app.patch("/:store/pickingList/:picking_list_id", function(request, result) {
     });
 });
 
+//get infos for a stock item : its description, department, stock positions with quantities and address name
 app.get("/:store/items/:item_id", function(request, result){
   getItemDetails(request.params.store, request.params.item_id)
+    .then(response => {
+      result.json(response);
+    })
+});
+
+//delete a picking list row without picking it
+app.delete("/:store/pickingList/:pickingList_id", function(request, result){
+  deletePickingRow(request.params.pickingList_id)
     .then(response => {
       result.json(response);
     })
