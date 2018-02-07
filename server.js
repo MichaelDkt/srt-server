@@ -1,7 +1,7 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const createAddress = require("./queries/createAddress");
-const createStockAddress = require("./queries/createStockAddress");
+const assignStock = require("./queries/assignStock");
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -19,8 +19,9 @@ app.post("/addresses", function(request, result) {
 
 
 // mettre un produit en stock à une adresse
-app.post("/stockAddresses", function(request, result) {
-  createStockAddress(request.body.store, request.body.address, request.body.item_id, request.body.qty)
+// soit créer le stock, soit modifier le stock d'une adresse/item existants
+app.put("/:store/addresses/:address", function(request, result) {
+  assignStock(request.params.store, request.params.address, request.body.item_id, request.body.qty)
     .then(response => {
       result.json(response);
     });
