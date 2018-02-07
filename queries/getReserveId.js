@@ -7,7 +7,6 @@ function getReserveId(store){
   [store])
     .then(result => {
       client.end();
-      console.log(result.rows[0].id);
       return result.rows[0].id;
     } )
     .catch(error => {

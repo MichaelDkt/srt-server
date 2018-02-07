@@ -3,7 +3,7 @@ const getReserveId = require("./getReserveId");
 
 function createAddress(store, address){
   const client = new Client();
-  getReserveId(store)
+  return getReserveId(store)
     .then(reserve_id => {
       client.connect();
       return client.query("INSERT INTO addresses (address, disabled, reserve_id) VALUES ($1, false, $2)",
