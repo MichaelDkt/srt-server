@@ -4,6 +4,7 @@ const createAddress = require("./queries/createAddress");
 const assignStock = require("./queries/assignStock");
 const deleteAddress = require("./queries/deleteAddress");
 const getPickingList = require("./queries/getPickingList");
+const modifyQtyPickingList = require("./queries/modifyQtyPickingList");
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -40,6 +41,14 @@ app.delete("/:store/addresses/:address", function(request, result) {
 // to retrieve the picking list of 1 email
 app.get("/:store/pickingList/:email", function(request, result) {
   getPickingList(request.params.store, request.params.email)
+    .then(response => {
+      result.json(response);
+    });
+});
+
+// to modify the qty of one line in this :picking_list_id
+app.patch("/:store/pickingList/:picking_list_id", function(request, result) {
+  modifyQtyPickingList(request.params.picking_list_id, request.body.qty)
     .then(response => {
       result.json(response);
     });
