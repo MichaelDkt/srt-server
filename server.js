@@ -2,6 +2,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const createAddress = require("./queries/createAddress");
 const assignStock = require("./queries/assignStock");
+const deleteAddress = require("./queries/deleteAddress");
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -18,8 +19,8 @@ app.post("/addresses", function(request, result) {
 });
 
 
-// mettre un produit en stock à une adresse
-// soit créer le stock, soit modifier le stock d'une adresse/item existants
+// put an item into an address
+// either create a stock , OR update an existing stock
 app.put("/:store/addresses/:address", function(request, result) {
   assignStock(request.params.store, request.params.address, request.body.item_id, request.body.qty)
     .then(response => {
@@ -27,7 +28,14 @@ app.put("/:store/addresses/:address", function(request, result) {
     });
 });
 
-
+// to delete an address
+app.delete("/:store/addresses/:address", function(request, result) {
+  deleteAddress(request.params.store, request.params.address)
+    .then(response => {
+      result.json(response);
+    })
+  ;
+});
 
 app.get("*", function(request, result) {
   result.send("Welcome on SRT API server")
