@@ -1,6 +1,7 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const createAddress = require("./queries/createAddress");
+const assignStock = require("./queries/assignStock");
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -15,6 +16,18 @@ app.post("/addresses", function(request, result) {
     })
   ;
 });
+
+
+// mettre un produit en stock à une adresse
+// soit créer le stock, soit modifier le stock d'une adresse/item existants
+app.put("/:store/addresses/:address", function(request, result) {
+  assignStock(request.params.store, request.params.address, request.body.item_id, request.body.qty)
+    .then(response => {
+      result.json(response);
+    });
+});
+
+
 
 app.get("*", function(request, result) {
   result.send("Welcome on SRT API server")
