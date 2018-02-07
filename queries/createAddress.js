@@ -2,22 +2,13 @@ const { Client } = require('pg');
 const getReserveId = require("./getReserveId");
 
 function createAddress(store, address){
-  console.log("debut" + store + " " + address);
+  const client = new Client();
   getReserveId(store)
     .then(reserve_id => {
-      const client = new Client();
       client.connect();
-
-    })
-
-  client.connect();
-  return client.query("SELECT id FROM reserves WHERE store_number = $1",
-  [store])
-    .then(result => {
-      const reserve_id = result.rows[0].id;
       return client.query("INSERT INTO addresses (address, disabled, reserve_id) VALUES ($1, false, $2)",
       [address, reserve_id]);
-      })
+    })
     .then(result => {
       client.end();
       return({
