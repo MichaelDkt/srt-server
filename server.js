@@ -27,7 +27,13 @@ app.put("/:store/addresses/:address", function(request, result) {
     });
 });
 
-
+app.delete("/:store/addresses/:address", function(request, result) {
+  createAddress(request.body.store, request.body.address)
+    .then(response => {
+      result.json(response);
+    })
+  ;
+});
 
 app.get("*", function(request, result) {
   result.send("Welcome on SRT API server")
