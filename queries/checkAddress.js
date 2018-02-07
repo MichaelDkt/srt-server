@@ -3,7 +3,7 @@ const { Client } = require('pg');
 
 
 function checkAddress(address) {
-  console.log(`Adresse à checker : ${address}`);
+
 
   const client = new Client();
   client.connect();
@@ -11,6 +11,7 @@ function checkAddress(address) {
   return client.query("SELECT * from addresses where address = $1",[address])
   .then(response => {
     if (response.rows[0] === undefined || !response.rows[0].disabled ) {
+      console.log(response.rows[0]);
       client.end();
       return ({
         address : address,
@@ -25,16 +26,14 @@ function checkAddress(address) {
     }
   })
   .catch(error => {
+    client.end();
     console.warn(error);
     return({
       code: "400",
       text: "KO " + error
     })
-    client.end();
   })
 
 };
-
-
 
 module.exports = checkAddress;
