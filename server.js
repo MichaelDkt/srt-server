@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 const createAddress = require("./queries/createAddress");
 const assignStock = require("./queries/assignStock");
 const deleteAddress = require("./queries/deleteAddress");
+const getPickingList = require("./queries/getPickingList");
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -33,8 +34,15 @@ app.delete("/:store/addresses/:address", function(request, result) {
   deleteAddress(request.params.store, request.params.address)
     .then(response => {
       result.json(response);
-    })
-  ;
+    });
+});
+
+// to retrieve the picking list of 1 email
+app.get("/:store/pickingList/:email", function(request, result) {
+  getPickingList(request.params.store, request.params.email)
+    .then(response => {
+      result.json(response);
+    });
 });
 
 app.get("*", function(request, result) {
