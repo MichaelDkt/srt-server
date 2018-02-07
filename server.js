@@ -54,6 +54,7 @@ app.patch("/:store/pickingList/:picking_list_id", function(request, result) {
     .then(response => {
       result.json(response);
     });
+});
 
 app.get("/:store/items/:item_id", function(request, result){
   getItemDetails(request.params.store, request.params.item_id)
