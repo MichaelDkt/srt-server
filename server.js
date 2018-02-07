@@ -9,8 +9,8 @@ const app = express();
 app.use(require("body-parser").json());
 app.use(require("body-parser").urlencoded({ extended: false }));
 
-app.post("/addresses", function(request, result) {
-  createAddress(request.body.store, request.body.address)
+app.post("/:store/addresses/:address", function(request, result) {
+  createAddress(request.params.store, request.params.address)
     .then(response => {
       result.json(response);
     })
