@@ -6,6 +6,7 @@ const deleteAddress = require("./queries/deleteAddress");
 const getPickingList = require("./queries/getPickingList");
 const modifyQtyPickingList = require("./queries/modifyQtyPickingList");
 const getItemDetails = require("./queries/getItemDetails");
+const addToPickingList = require("./queries/addToPickingList");
 
 
 const port = process.env.PORT || 4000;
@@ -20,6 +21,14 @@ app.post("/:store/addresses/:address", function(request, result) {
       result.json(response);
     })
   ;
+});
+
+// mettre un produit dans la picking list
+app.post("/:store/pickinglist/:email", function(request, result) {
+  addToPickingList(request.body.address, request.body.item_id, request.body.qty, request.params.email, request.params.store)
+    .then(response => {
+      result.json(response);
+    });
 });
 
 
