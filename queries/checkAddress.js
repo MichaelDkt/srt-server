@@ -7,11 +7,9 @@ function checkAddress(address) {
 
   const client = new Client();
   client.connect();
-
   return client.query("SELECT * from addresses where address = $1",[address])
   .then(response => {
-    if (response.rows[0] === undefined || !response.rows[0].disabled ) {
-      console.log(response.rows[0]);
+    if (response.rows[0] === undefined ) {
       client.end();
       return ({
         address : address,
@@ -21,8 +19,28 @@ function checkAddress(address) {
       client.end();
       return ({
         address : address,
-        status : "disabled"
+        status : "blocked location"
       })
+    } else {
+      return client.query("SELECT * from stock_addresses where address_id = $1",
+     [response.rows[0].id])
+     .then(response => {
+       client.end();
+       if (response.rows.length === 0) {
+         return ({
+           address : address,
+           status : "available"
+         })
+       } else {
+         return response.rows.map(element => {
+           return ({
+             places : response.rowCount,
+             item : element.item_id,
+             qty : element.qty
+           });
+         })
+       }
+     })
     }
   })
   .catch(error => {
@@ -35,5 +53,6 @@ function checkAddress(address) {
   })
 
 };
+
 
 module.exports = checkAddress;
