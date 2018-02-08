@@ -8,6 +8,7 @@ const modifyQtyPickingList = require("./queries/modifyQtyPickingList");
 const getItemDetails = require("./queries/getItemDetails");
 const addToPickingList = require("./queries/addToPickingList");
 const deletePickingRow = require("./queries/deletePickingRow");
+const checkAddress = require("./queries/checkAddress");
 
 
 
@@ -25,7 +26,7 @@ app.post("/:store/addresses/:address", function(request, result) {
   ;
 });
 
-// mettre un produit dans la picking list
+// Add an itme to the pickingList
 app.post("/:store/pickinglist/:email", function(request, result) {
   addToPickingList(request.body.address, request.body.item_id, request.body.qty, request.params.email, request.params.store)
     .then(response => {
@@ -82,6 +83,17 @@ app.delete("/:store/pickingList/:pickingList_id", function(request, result){
       result.json(response);
     })
 });
+
+//Check adress status ( available, blocked location, display content)
+//pay attention to upper / lower case, with and without the dash
+app.get("/:store/addresses/:address", function(request, result){
+  checkAddress(request.params.address)
+  .then(response => {
+    result.json(response);
+  })
+})
+
+
 
 app.get("*", function(request, result) {
   result.send("Welcome on SRT API server")
