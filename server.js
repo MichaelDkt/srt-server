@@ -20,7 +20,7 @@ app.use(require("body-parser").json());
 app.use(require("body-parser").urlencoded({ extended: false }));
 
 
-// to retrive all the addresses of one store
+// to retrieve all the addresses of one store
 app.get("/:store/addresses", function(request, result) {
   getAllAddresses(request.params.store)
     .then(response => {
@@ -38,8 +38,8 @@ app.post("/:store/addresses/:address", function(request, result) {
 });
 
 // Add an itme to the pickingList
-app.post("/:store/pickinglist/:email", function(request, result) {
-  addToPickingList(request.body.address, request.body.item_id, request.body.qty, request.params.email, request.params.store)
+app.post("/:store/pickinglist", function(request, result) {
+  addToPickingList(request.body.stock_addresses_id, request.body.qty, request.body.email, request.params.store)
     .then(response => {
       result.json(response);
     });
