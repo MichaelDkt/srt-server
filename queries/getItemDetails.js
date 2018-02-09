@@ -52,8 +52,6 @@ function getAddressName(address_id){
     [address_id])
     .then(result => {
       client.end();
-      console.log("address name :");
-      console.log(result.rows[0].address);
       return result.rows[0].address;
     })
     .catch(error => {
@@ -81,14 +79,30 @@ function getItemDetails(store, item_id){
           })
       }))})
     .then(stock => {
-      const result = {
-        item_id: data.id,
-        item_description: data.item_description,
-        department_description: data.department_description,
-        stock: stock
-      };
-      console.log(result);
-      return result;
+      function compare(a,b) {
+        if (a.address < b.address)
+          return -1;
+        if (a.address > b.address)
+          return 1;
+        return 0;
+      }
+      stock.sort(compare);
+
+      if(data === undefined){
+        return {
+          item_id: "page",
+          item_description: `${item_id} does not exist`,
+          department_description: "",
+          stock: []
+        };
+      } else {
+        return {
+          item_id: data.id,
+          item_description: data.item_description,
+          department_description: data.department_description,
+          stock: stock
+        };
+      }
     })
   ;
 }
