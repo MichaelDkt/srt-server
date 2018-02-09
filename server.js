@@ -1,5 +1,6 @@
 const express = require("express");
 const fetch = require("node-fetch");
+const getAllAddresses = require("./queries/getAllAddresses");
 const createAddress = require("./queries/createAddress");
 const assignStock = require("./queries/assignStock");
 const deleteAddress = require("./queries/deleteAddress");
@@ -18,6 +19,16 @@ const app = express();
 app.use(require("body-parser").json());
 app.use(require("body-parser").urlencoded({ extended: false }));
 
+
+// to retrive all the addresses of one store
+app.get("/:store/addresses", function(request, result) {
+  getAllAddresses(request.params.store)
+    .then(response => {
+      result.json(response);
+    });
+});
+
+// Add an address for one store
 app.post("/:store/addresses/:address", function(request, result) {
   createAddress(request.params.store, request.params.address)
     .then(response => {
