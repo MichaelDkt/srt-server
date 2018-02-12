@@ -98,7 +98,7 @@ app.delete("/:store/pickingList/:pickingList_id", function(request, result){
 //Check adress status ( available, blocked location, display content)
 //pay attention to upper / lower case, with and without the dash
 app.get("/:store/addresses/:address", function(request, result){
-  checkAddress(request.params.address)
+  checkAddress(request.params.address, request.params.store)
   .then(response => {
     result.json(response);
   })
