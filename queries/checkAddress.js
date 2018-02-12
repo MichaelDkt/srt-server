@@ -1,13 +1,14 @@
 const { Client } = require('pg');
+const getReserveId = require("./getReserveId");
 
 
-
-function checkAddress(address) {
+function checkAddress(address, store) {
 
 
   const client = new Client();
   client.connect();
-  return client.query("SELECT * from addresses where address = $1",[address])
+  return getReserveId(store)
+  .then(reserve_id => client.query("SELECT * from addresses where address = $1 AND reserve_id = $2",[address, reserve_id]))
   .then(response => {
     if (response.rows[0] === undefined ) {
       client.end();
@@ -20,6 +21,7 @@ function checkAddress(address) {
       client.end();
       return ({
         address : address,
+        address_id : response.rows[0].id,
         disabled: true,
         exists : true
       })
@@ -31,6 +33,7 @@ function checkAddress(address) {
        if (response.rows.length === 0) {
          return ({
            address : address,
+           address_id : response.rows[0].id,
            status : "available",
            disabled: false,
            exists : true
