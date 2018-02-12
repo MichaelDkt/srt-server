@@ -31,7 +31,7 @@ function checkAddress(address) {
        if (response.rows.length === 0) {
          return ({
            address : address,
-           status : "available"
+           status : "available",
            disabled: "false",
            exists : "true"
          })
