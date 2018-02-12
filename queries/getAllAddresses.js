@@ -6,7 +6,12 @@ function getAllAddresses(store, address){
   return getReserveId(store)
     .then(reserve_id => {
       client.connect();
-      return client.query("SELECT id, address, disabled, reserve_id FROM addresses WHERE reserve_id = $1 ORDER BY address",
+      return client.query("\
+      SELECT a.id, a.address, a.disabled, a.reserve_id, count(sa.id) AS qty_ref  \
+      FROM addresses AS a LEFT JOIN stock_addresses AS sa ON sa.address_id = a.id \
+      WHERE reserve_id = $1 \
+      GROUP BY a.id, a.address, a.disabled, a.reserve_id \
+      ORDER BY address",
       [reserve_id]);
     })
     .then(result => {
