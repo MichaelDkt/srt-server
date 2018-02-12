@@ -13,15 +13,15 @@ function checkAddress(address) {
       client.end();
       return ({
         address : address,
-        disabled: "false",
-        exists : "false"
+        disabled: false,
+        exists : false
       })
     } else if (response.rows[0].disabled ) {
       client.end();
       return ({
         address : address,
-        disabled: "true",
-        exists : "true"
+        disabled: true,
+        exists : true
       })
     } else {
       return client.query("SELECT * from stock_addresses where address_id = $1",
@@ -32,8 +32,8 @@ function checkAddress(address) {
          return ({
            address : address,
            status : "available",
-           disabled: "false",
-           exists : "true"
+           disabled: false,
+           exists : true
          })
        } else {
          return response.rows.map(element => {
