@@ -38,7 +38,6 @@ function checkAddress(address) {
        } else {
          return response.rows.map(element => {
            return ({
-             places : response.rowCount,
              item : element.item_id,
              qty : element.qty
            });
