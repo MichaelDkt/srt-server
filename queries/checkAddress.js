@@ -13,13 +13,15 @@ function checkAddress(address) {
       client.end();
       return ({
         address : address,
-        status : "available"
+        disabled: "false",
+        exists : "false"
       })
     } else if (response.rows[0].disabled ) {
       client.end();
       return ({
         address : address,
-        status : "blocked location"
+        disabled: "true",
+        exists : "true"
       })
     } else {
       return client.query("SELECT * from stock_addresses where address_id = $1",
@@ -29,12 +31,13 @@ function checkAddress(address) {
        if (response.rows.length === 0) {
          return ({
            address : address,
-           status : "available"
+           status : "available",
+           disabled: "false",
+           exists : "true"
          })
        } else {
          return response.rows.map(element => {
            return ({
-             places : response.rowCount,
              item : element.item_id,
              qty : element.qty
            });
