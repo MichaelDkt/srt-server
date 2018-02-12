@@ -56,8 +56,8 @@ app.put("/:store/addresses/:address", function(request, result) {
 });
 
 // to delete an address
-app.delete("/:store/addresses/:address", function(request, result) {
-  deleteAddress(request.params.store, request.params.address)
+app.patch("/:store/addresses/:address", function(request, result) {
+  deleteAddress(request.params.store, request.params.address, request.body.disabled)
     .then(response => {
       result.json(response);
     });

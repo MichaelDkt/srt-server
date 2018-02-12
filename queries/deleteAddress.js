@@ -1,7 +1,7 @@
 const { Client } = require('pg');
 const getReserveId = require("./getReserveId");
 
-function deleteAddress(store, address){
+function deleteAddress(store, address, disabled){
 
   const client = new Client();
   client.connect();
@@ -20,7 +20,7 @@ function deleteAddress(store, address){
 
       if (result.rows[0].count === '0'){
 
-        return client.query("UPDATE addresses SET disabled = true WHERE id = $1",[address])
+        return client.query("UPDATE addresses SET disabled = $2 WHERE id = $1",[address, disabled])
         .then( result => {
           client.end();
           return({
