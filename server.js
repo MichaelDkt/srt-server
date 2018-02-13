@@ -10,7 +10,7 @@ const getItemDetails = require("./queries/getItemDetails");
 const addToPickingList = require("./queries/addToPickingList");
 const deletePickingRow = require("./queries/deletePickingRow");
 const checkAddress = require("./queries/checkAddress");
-
+const getStores = require("./queries/getStores");
 
 
 const port = process.env.PORT || 4000;
@@ -104,6 +104,13 @@ app.get("/:store/addresses/:address", function(request, result){
   })
 })
 
+// get all the stores stored in the database
+app.get("/stores", function(request, result){
+  getStores()
+  .then(response => {
+    result.json(response);
+  })
+})
 
 
 app.get("*", function(request, result) {
