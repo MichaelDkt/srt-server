@@ -3,7 +3,7 @@ const getReserveId = require("./getReserveId");
 
 
 function checkAddress(address, store) {
-
+  let response_id;
 
   const client = new Client();
   client.connect();
@@ -26,6 +26,7 @@ function checkAddress(address, store) {
         exists : true
       })
     } else {
+      response_id = response.rows[0].id;
       return client.query("SELECT * from stock_addresses where address_id = $1",
      [response.rows[0].id])
      .then(response => {
@@ -33,18 +34,24 @@ function checkAddress(address, store) {
        if (response.rows.length === 0) {
          return ({
            address : address,
-           address_id : response.rows[0].id,
-           status : "available",
+           address_id : response_id,
            disabled: false,
-           exists : true
+           exists : true,
+           stock : []
          })
        } else {
-         return response.rows.map(element => {
-           return ({
-             item : element.item_id,
-             qty : element.qty
-           });
-         })
+         return {
+           address : address,
+           address_id : response_id,
+           disabled : false,
+           exists : true,
+           stock : response.rows.map(element => {
+             return ({
+               item : element.item_id,
+               qty : element.qty
+             });
+           })
+         }
        }
      })
     }
