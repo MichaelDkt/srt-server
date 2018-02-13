@@ -19,6 +19,11 @@ const app = express();
 app.use(require("body-parser").json());
 app.use(require("body-parser").urlencoded({ extended: false }));
 
+app.use(function(request, result, next) {
+  result.header("Access-Control-Allow-Origin", "https://store-reserve-tool-develop.herokuapp.com/, http://store-reserve-tool-develop.herokuapp.com/, https://store-reserve-tool.herokuapp.com/, http://store-reserve-tool.herokuapp.com/"); 
+  result.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // Needed by ExpressJS
+  next();
+});
 
 // to retrieve all the addresses of one store
 app.get("/:store/addresses", function(request, result) {
