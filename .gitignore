@@ -21,3 +21,5 @@ yarn-debug.log*
 yarn-error.log*
 seeds.sql
 .env
+srt_dump
+srt_dump_sauvegarde
