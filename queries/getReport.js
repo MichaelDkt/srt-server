@@ -7,10 +7,10 @@ function getReport(store){
     .then(reserve_id => {
       client.connect();
       return client.query("\
-      SELECT sa.id, a.address, a.disabled, sa.item_id, c.item_description, sa.qty \
+      SELECT sa.id, a.address, a.disabled, sa.item_id, c.item_description, c.department_description, sa.qty \
       FROM addresses AS a \
-      LEFT JOIN stock_addresses AS sa ON sa.address_id = a.id \
-      LEFT JOIN catalog AS c ON sa.item_id = c.id \
+      JOIN stock_addresses AS sa ON sa.address_id = a.id \
+      JOIN catalog AS c ON sa.item_id = c.id \
       WHERE a.reserve_id = $1 \
       ORDER BY a.address, sa.item_id \
       ", [reserve_id]);
