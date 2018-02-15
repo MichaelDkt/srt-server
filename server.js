@@ -12,6 +12,7 @@ const deletePickingRow = require("./queries/deletePickingRow");
 const checkAddress = require("./queries/checkAddress");
 const getStores = require("./queries/getStores");
 const getReport = require("./queries/getReport");
+const getDepartment = require("./queries/getDepartment");
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -127,6 +128,14 @@ app.get("/stores", function(request, result){
 // get addresses , stock, item
 app.get("/:store/report", function(request, result){
   getReport(request.params.store)
+  .then(response => {
+    result.json(response);
+  })
+})
+
+// get departments list
+app.get("/department", function(request, result){
+  getDepartment()
   .then(response => {
     result.json(response);
   })
