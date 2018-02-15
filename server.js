@@ -11,7 +11,7 @@ const addToPickingList = require("./queries/addToPickingList");
 const deletePickingRow = require("./queries/deletePickingRow");
 const checkAddress = require("./queries/checkAddress");
 const getStores = require("./queries/getStores");
-
+const getReport = require("./queries/getReport");
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -119,6 +119,14 @@ app.get("/:store/addresses/:address", function(request, result){
 // get all the stores stored in the database
 app.get("/stores", function(request, result){
   getStores()
+  .then(response => {
+    result.json(response);
+  })
+})
+
+// get addresses , stock, item
+app.get("/:store/report", function(request, result){
+  getReport(request.params.store)
   .then(response => {
     result.json(response);
   })
